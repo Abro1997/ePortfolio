@@ -738,8 +738,8 @@
                     statusEl.textContent = 'Playing';
                 });
             }
-            // === Pause background music when YouTube video plays ===
-            function onYouTubeIframeAPIReady() {
+            // === Stop background music when YouTube video plays ===
+            window.onYouTubeIframeAPIReady = function () {
                 const iframe = document.getElementById('careerVideo');
                 if (!iframe) return;
 
@@ -759,11 +759,11 @@
                                 statusEl.textContent = '🔇 Audio off (video playing)';
                                 muteBtn.textContent = '🔇 Unmute';
                             } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                                // Fade back in when video pauses/ends
+                                // Fade back in when video pauses or ends
                                 audio.muted = false;
                                 audio.volume = 0;
                                 audio.play().catch(() => { });
-                                let target = 0.15;
+                                let target = 0.15; // lower volume
                                 const fadeIn = setInterval(() => {
                                     if (audio.volume < target) audio.volume += 0.02;
                                     else clearInterval(fadeIn);
@@ -771,12 +771,11 @@
                                 statusEl.textContent = 'Playing';
                                 muteBtn.textContent = '🔊 Mute';
                             }
-
-
                         }
                     }
                 });
-            }
+            };
+
 
             // Load the YouTube IFrame API
             const tag = document.createElement('script');
