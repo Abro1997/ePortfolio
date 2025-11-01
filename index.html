@@ -747,16 +747,19 @@
                     events: {
                         'onStateChange': event => {
                             if (event.data === YT.PlayerState.PLAYING) {
-                                if (!audio.paused) {
-                                    audio.pause();
-                                    statusEl.textContent = 'Paused for video';
-                                }
+                                // Fully stop and mute background music when video starts
+                                audio.pause();
+                                audio.muted = true;
+                                statusEl.textContent = '🔇 Audio off (video playing)';
+                                muteBtn.textContent = '🔇 Unmute';
                             } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                                if (!audio.muted) {
-                                    audio.play().catch(() => { });
-                                    statusEl.textContent = 'Playing';
-                                }
+                                // Resume only if user didn’t manually mute
+                                audio.muted = false;
+                                audio.play().catch(() => { });
+                                statusEl.textContent = 'Playing';
+                                muteBtn.textContent = '🔊 Mute';
                             }
+
                         }
                     }
                 });
