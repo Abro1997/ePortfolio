@@ -352,10 +352,16 @@
                             </p>
 
                             <!-- Elevator pitch video -->
-                            <video id="careerVideo" controls style="max-width:480px;width:100%;border-radius:12px;box-shadow:0 0 20px rgba(122,162,255,0.4);">
-                                <source src="assets/elevator_pitch.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                            <div style="max-width:480px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 0 20px rgba(122,162,255,0.4);">
+                                <iframe id="careerVideo" width="100%" height="270"
+                                        src="https://www.youtube.com/watch?v=kgNeXQB5Cas"
+                                        title="Elevator Pitch"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+
 
                             <!-- CV download links -->
                             <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
@@ -732,6 +738,34 @@
                     statusEl.textContent = 'Playing';
                 });
             }
+            // === Pause background music when YouTube video plays ===
+            function onYouTubeIframeAPIReady() {
+                const iframe = document.getElementById('careerVideo');
+                if (!iframe) return;
+
+                const player = new YT.Player(iframe, {
+                    events: {
+                        'onStateChange': event => {
+                            if (event.data === YT.PlayerState.PLAYING) {
+                                if (!audio.paused) {
+                                    audio.pause();
+                                    statusEl.textContent = 'Paused for video';
+                                }
+                            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                                if (!audio.muted) {
+                                    audio.play().catch(() => { });
+                                    statusEl.textContent = 'Playing';
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Load the YouTube IFrame API
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            document.body.appendChild(tag);
 
             tryAutoplay();
         </script>
