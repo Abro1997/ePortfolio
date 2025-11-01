@@ -675,7 +675,7 @@
                     let v = 0;
                     const fade = setInterval(() => {
                         v += 0.02;
-                        if (v >= 0.3) { v = 0.3; clearInterval(fade); }
+                        if (v >= 0.15) { v = 0.15; clearInterval(fade); }
                         audio.volume = v;
                     }, 120);
                 } catch {
@@ -701,7 +701,7 @@
                     await audio.play();
                     gate.style.display = 'none';
                     setMuted(false);
-                    let target = 0.3, step = target / 30;
+                    let target = 0.15, step = target / 30;
                     let fade = setInterval(() => {
                         if (audio.volume + step < target) audio.volume += step;
                         else { audio.volume = target; clearInterval(fade); }
@@ -747,18 +747,31 @@
                     events: {
                         'onStateChange': event => {
                             if (event.data === YT.PlayerState.PLAYING) {
-                                // Fully stop and mute background music when video starts
-                                audio.pause();
-                                audio.muted = true;
+                                // Fade out and mute background music when video starts
+                                const fadeOut = setInterval(() => {
+                                    if (audio.volume > 0.02) audio.volume -= 0.02;
+                                    else {
+                                        audio.pause();
+                                        audio.muted = true;
+                                        clearInterval(fadeOut);
+                                    }
+                                }, 100);
                                 statusEl.textContent = '🔇 Audio off (video playing)';
                                 muteBtn.textContent = '🔇 Unmute';
                             } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                                // Resume only if user didn’t manually mute
+                                // Fade back in when video pauses/ends
                                 audio.muted = false;
+                                audio.volume = 0;
                                 audio.play().catch(() => { });
+                                let target = 0.15;
+                                const fadeIn = setInterval(() => {
+                                    if (audio.volume < target) audio.volume += 0.02;
+                                    else clearInterval(fadeIn);
+                                }, 100);
                                 statusEl.textContent = 'Playing';
                                 muteBtn.textContent = '🔊 Mute';
                             }
+
 
                         }
                     }
