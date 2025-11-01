@@ -333,7 +333,7 @@
                     <div class="card">
                         <h2 class="title">Contact</h2>
                         <p class="subtitle">Let’s connect or collaborate!</p>
-                        <div class="slot"><strong>EMAIL:</strong> mouak@example.com</div>
+                        <div class="slot"><strong>EMAIL:</strong> abdollah007mouak@gmail.com</div>
                     </div>
                 </section>
 
@@ -342,7 +342,31 @@
                     <div class="card">
                         <h2 class="title">Careers</h2>
                         <p class="subtitle">Professional ambitions and future goals.</p>
-                        <div class="slot">Placeholder — career goals and professional aspirations will be added here later.</div>
+                        <div class="slot" style="display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;">
+                            <h3 style="font-size:1.4rem;margin-bottom:8px;color:#b987ff;">Career Goals & Presentation</h3>
+                            <p style="max-width:700px;line-height:1.7;">
+                                I am passionate about engineering, computer science, and innovation.
+                                My goal is to contribute to cutting-edge technological projects that combine
+                                analytical thinking with creativity — whether in research, software development,
+                                or simulation and modeling.
+                            </p>
+
+                            <!-- Elevator pitch video -->
+                            <video id="careerVideo" controls style="max-width:480px;width:100%;border-radius:12px;box-shadow:0 0 20px rgba(122,162,255,0.4);">
+                                <source src="assets/elevator_pitch.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+
+                            <!-- CV download links -->
+                            <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
+                                <a href="assets/CV_English.pdf" target="_blank" style="padding:10px 18px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;text-decoration:none;font-weight:600;box-shadow:0 0 10px rgba(122,162,255,0.4);">
+                                    📄 View CV (English)
+                                </a>
+                                <a href="assets/CV_French.pdf" target="_blank" style="padding:10px 18px;border-radius:10px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:white;text-decoration:none;font-weight:600;box-shadow:0 0 10px rgba(185,135,255,0.4);">
+                                    📄 Voir CV (Français)
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -375,7 +399,46 @@
                     <div class="card">
                         <h2 class="title">Mobility</h2>
                         <p class="subtitle">International experiences and future opportunities.</p>
-                        <div class="slot">Placeholder — content for this section will be added later.</div>
+                        <div class="slot" style="display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;">
+                            <h3 style="font-size:1.4rem;margin-bottom:8px;color:#7aa2ff;">Inspiring Career Mobility</h3>
+                            <p style="max-width:740px;line-height:1.75;">
+                                Oh man — profiles like these are genuinely inspiring.
+                                They show how computer science and engineering can open paths around the world,
+                                and how mobility can mean both <strong>career growth</strong> and <strong>cultural exploration</strong>.
+                            </p>
+
+                            <!-- Japan -->
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                                <img src="assets/Yukihiro.jpg" alt="Yukihiro Matsumoto" style="width:160px;height:auto;border-radius:12px;box-shadow:0 0 16px rgba(122,162,255,0.4);border:1px solid rgba(255,255,255,0.2);">
+                                <p style="max-width:680px;line-height:1.7;">
+                                    🇯🇵 <strong>Yukihiro Matsumoto</strong> — creator of the Ruby programming language.
+                                    A Japanese engineer who built a tool used worldwide — showing how creativity and code can cross borders.
+                                </p>
+                            </div>
+
+                            <!-- Canada -->
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                                <img src="assets/Bengio.jpg" alt="Yoshua Bengio" style="width:160px;height:auto;border-radius:12px;box-shadow:0 0 16px rgba(185,135,255,0.4);border:1px solid rgba(255,255,255,0.2);">
+                                <p style="max-width:680px;line-height:1.7;">
+                                    🇨🇦 <strong>Yoshua Bengio</strong> — AI researcher and pioneer of deep learning.
+                                    His work in Montréal connects science and innovation at a global scale.
+                                </p>
+                            </div>
+
+                            <!-- USA -->
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                                <img src="assets/Altman.jpg" alt="Sam Altman" style="width:160px;height:auto;border-radius:12px;box-shadow:0 0 16px rgba(122,162,255,0.4);border:1px solid rgba(255,255,255,0.2);">
+                                <p style="max-width:680px;line-height:1.7;">
+                                    🇺🇸 <strong>Sam Altman</strong> — entrepreneur behind major AI innovations.
+                                    A reminder that ambition, technology, and vision can drive impact far beyond one’s borders.
+                                </p>
+                            </div>
+
+                            <p style="max-width:740px;line-height:1.75;margin-top:16px;">
+                                These <strong>international success stories</strong> reflect what inspires me most about mobility:
+                                learning from diverse paths, connecting cultures, and pursuing a career that reaches beyond one country.
+                            </p>
+                        </div>
                     </div>
                 </section>
 
@@ -647,6 +710,28 @@
                     audio.play().catch(() => { });
                 }
             });
+            // === Pause background music when career video plays ===
+            const video = document.getElementById('careerVideo');
+            if (video) {
+                video.addEventListener('play', () => {
+                    if (!audio.paused) {
+                        audio.pause();
+                        statusEl.textContent = 'Paused for video';
+                    }
+                });
+
+                video.addEventListener('pause', () => {
+                    if (audio.muted) return; // resume only if not muted
+                    audio.play().catch(() => { });
+                    statusEl.textContent = 'Playing';
+                });
+
+                video.addEventListener('ended', () => {
+                    if (audio.muted) return;
+                    audio.play().catch(() => { });
+                    statusEl.textContent = 'Playing';
+                });
+            }
 
             tryAutoplay();
         </script>
